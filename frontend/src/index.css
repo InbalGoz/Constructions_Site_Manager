@@ -1,0 +1,427 @@
+@import "tailwindcss";
+@import "./styles/globals.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    direction: rtl;
+    font-size: var(--font-size);
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      sans-serif;
+    min-height: 100vh;
+    height: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    height: 100%;
+  }
+
+  /* Full height utilities */
+  .min-h-full-screen {
+    min-height: 100vh;
+  }
+
+  .h-full-screen {
+    height: 100vh;
+  }
+
+  /* Enhanced spacing utilities */
+  .spacing-xs {
+    margin: var(--spacing-xs);
+  }
+  .spacing-sm {
+    margin: var(--spacing-sm);
+  }
+  .spacing-md {
+    margin: var(--spacing-md);
+  }
+  .spacing-lg {
+    margin: var(--spacing-lg);
+  }
+  .spacing-xl {
+    margin: var(--spacing-xl);
+  }
+  .spacing-2xl {
+    margin: var(--spacing-2xl);
+  }
+  .spacing-3xl {
+    margin: var(--spacing-3xl);
+  }
+  .spacing-4xl {
+    margin: var(--spacing-4xl);
+  }
+  .spacing-5xl {
+    margin: var(--spacing-5xl);
+  }
+
+  .padding-xs {
+    padding: var(--spacing-xs);
+  }
+  .padding-sm {
+    padding: var(--spacing-sm);
+  }
+  .padding-md {
+    padding: var(--spacing-md);
+  }
+  .padding-lg {
+    padding: var(--spacing-lg);
+  }
+  .padding-xl {
+    padding: var(--spacing-xl);
+  }
+  .padding-2xl {
+    padding: var(--spacing-2xl);
+  }
+  .padding-3xl {
+    padding: var(--spacing-3xl);
+  }
+  .padding-4xl {
+    padding: var(--spacing-4xl);
+  }
+  .padding-5xl {
+    padding: var(--spacing-5xl);
+  }
+
+  /* Enhanced max-width utilities */
+  .max-w-8xl {
+    max-width: var(--max-w-8xl);
+  }
+  .max-w-9xl {
+    max-width: var(--max-w-9xl);
+  }
+  .max-w-full-screen {
+    max-width: var(--max-w-full-screen);
+  }
+
+  /* RTL-specific styles */
+  .rtl-space-x-4 > * + * {
+    margin-right: 1rem;
+    margin-left: 0;
+  }
+
+  .rtl-space-x-2 > * + * {
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+
+  .rtl-space-x-3 > * + * {
+    margin-right: 0.75rem;
+    margin-left: 0;
+  }
+
+  /* Override Tailwind's space-x for RTL */
+  [dir="rtl"] .space-x-4 > * + * {
+    margin-right: 1rem;
+    margin-left: 0;
+  }
+
+  [dir="rtl"] .space-x-2 > * + * {
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+
+  [dir="rtl"] .space-x-3 > * + * {
+    margin-right: 0.75rem;
+    margin-left: 0;
+  }
+
+  /* RTL margin adjustments */
+  .mr-auto-rtl {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .ml-auto-rtl {
+    margin-right: auto;
+    margin-left: 0;
+  }
+
+  /* Enhanced container utilities */
+  .container-full {
+    width: 100%;
+    max-width: none;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .container-wide {
+    width: 100%;
+    max-width: var(--container-4xl);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Responsive utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Enhanced grid utilities */
+  .grid-auto-fit-xs {
+    grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  }
+
+  .grid-auto-fit-sm {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+
+  .grid-auto-fit-md {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+
+  .grid-auto-fit-lg {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+
+  .grid-auto-fit-xl {
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+  }
+
+  /* Touch targets for mobile */
+  @media (max-width: 768px) {
+    button,
+    [role="button"],
+    input,
+    select,
+    textarea {
+      min-height: 44px;
+    }
+
+    /* Increase touch target for mobile navigation */
+    .mobile-nav-item {
+      min-height: 48px;
+      padding: 12px 16px;
+    }
+
+    /* Enhanced mobile spacing */
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .mobile-padding-enhanced {
+      padding: 1.5rem 1rem;
+    }
+
+    .mobile-margin-enhanced {
+      margin: 1rem 0.5rem;
+    }
+  }
+
+  /* Responsive spacing adjustments */
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .sm-spacing-reduced .space-y-8 > * + * {
+      margin-top: 1rem;
+    }
+
+    .sm-spacing-reduced .space-y-6 > * + * {
+      margin-top: 0.75rem;
+    }
+  }
+
+  /* Tablet enhanced spacing */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .tablet-spacing-enhanced {
+      padding: 2rem 1.5rem;
+    }
+
+    .tablet-gap-enhanced {
+      gap: 1.5rem;
+    }
+  }
+
+  /* Desktop enhanced spacing */
+  @media (min-width: 1024px) {
+    .desktop-spacing-enhanced {
+      padding: 3rem 2rem;
+    }
+
+    .desktop-gap-enhanced {
+      gap: 2rem;
+    }
+
+    .desktop-container-wide {
+      max-width: var(--container-4xl);
+    }
+  }
+
+  /* Large desktop enhanced spacing */
+  @media (min-width: 1536px) {
+    .xl-spacing-enhanced {
+      padding: 4rem 3rem;
+    }
+
+    .xl-gap-enhanced {
+      gap: 3rem;
+    }
+
+    .xl-container-full {
+      max-width: var(--max-w-9xl);
+    }
+  }
+
+  /* Ultra-wide display support */
+  @media (min-width: 1920px) {
+    .ultra-wide-container {
+      max-width: var(--max-w-full-screen);
+      padding-left: 5rem;
+      padding-right: 5rem;
+    }
+
+    .ultra-wide-spacing {
+      padding: 6rem 4rem;
+    }
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: var(--text-2xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h2 {
+      font-size: var(--text-xl);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h3 {
+      font-size: var(--text-lg);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    h4 {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    p {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+
+    label {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    button {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+/* Enhanced responsive typography */
+@media (max-width: 768px) {
+  .mobile-optimized {
+    font-size: 0.875rem;
+  }
+
+  .mobile-padding {
+    padding: 0.75rem;
+  }
+
+  .mobile-margin {
+    margin: 0.5rem;
+  }
+
+  .mobile-text-large {
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .mobile-text-xl {
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tablet-optimized {
+    font-size: 0.9375rem;
+  }
+
+  .tablet-text-enhanced {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 1024px) {
+  .desktop-optimized {
+    font-size: 1rem;
+  }
+
+  .desktop-text-enhanced {
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+
+  .desktop-heading-enhanced {
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+}
+
+/* Large desktop styles */
+@media (min-width: 1536px) {
+  .xl-text-enhanced {
+    font-size: 1.25rem;
+    line-height: 1.8;
+  }
+
+  .xl-heading-enhanced {
+    font-size: 2rem;
+    line-height: 1.3;
+  }
+}
