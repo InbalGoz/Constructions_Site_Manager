@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 //import { HomePage } from "./components/HomePage";import
 import { SitesPage } from "./pages/SitesPage";
 //import { SiteDetailsPage } from "./components/SiteDetailsPage";
-//import { EmployeesPage } from "./components/EmployeesPage";
+import { EmployeesPage } from "./pages/EmployeesPage";
 //import { WorkHoursPage } from "./components/WorkHoursPage";
 ////import { EquipmentPage } from "./components/EquipmentPage";
 import { Navigation } from "./components/Navigation";
@@ -44,6 +44,14 @@ function App() {
         element={
           <Layout>
             <SitesPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/employees"
+        element={
+          <Layout>
+            <EmployeesPage />
           </Layout>
         }
       />

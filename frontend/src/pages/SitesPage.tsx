@@ -214,8 +214,8 @@ export function SitesPage() {
       const newSite: Site = {
         ...siteData,
         // id: Date.now().toString(),
-        createdAt: now,
-        updatedAt: now,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       //const newSites = [newSite, ...sites];
@@ -237,7 +237,7 @@ export function SitesPage() {
       const updatedSite: Site = {
         ...editingSite,
         ...siteData,
-        updatedAt: new Date().toISOString(),
+        updatedAt: new Date(), //.toISOString(),
       };
 
       /* const newSites = sites.map((site) =>
@@ -257,13 +257,13 @@ export function SitesPage() {
   };
 
   // Delete site
-  const handleDeleteSite = async (siteId: number | undefined) => {
+  const handleDeleteSite = async (siteId: string | undefined) => {
     //if (!deletingSite) return;
 
     try {
       // const newSites = sites.filter((site) => site.id !== deletingSite.id);
       //saveSites(newSites);
-      dispatch(deleteSiteThunk(siteId || 0));
+      dispatch(deleteSiteThunk(siteId || ""));
       //setDeletingSite(null);
       toast.success("האתר נמחק בהצלחה");
     } catch (deleteError) {

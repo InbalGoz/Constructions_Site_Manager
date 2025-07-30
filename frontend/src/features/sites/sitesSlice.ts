@@ -1,18 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Site } from "../../models/site";
+import type { Site, SiteStatus } from "../../models/site";
 import {
   fetchAllSites,
   fetchSiteById,
   createSite,
   updateSite,
   deleteSite,
+  fetchAllSiteStatuses,
 } from "./sitesService";
 import { toast } from "sonner";
 
 interface SitesState {
   all_sites: Site[];
   selected_site: Site | null;
+  siteStatuses: SiteStatus[];
   loading: boolean;
   error: string | null;
 }
@@ -20,6 +22,7 @@ interface SitesState {
 const initialState: SitesState = {
   all_sites: [],
   selected_site: null,
+  siteStatuses: [],
   loading: false,
   error: null,
 };
@@ -36,6 +39,14 @@ export const loadAllSites = createAsyncThunk("sites/getAllSites", async () => {
   const sites = await fetchAllSites();
   return sites; // TypeScript יגדיר את payload כ־Site[] אוטומטית
 });
+
+export const getSiteStatuses = createAsyncThunk(
+  "site/getSiteStatuses",
+  async () => {
+    const siteStatuses = await fetchAllSiteStatuses();
+    return siteStatuses;
+  }
+);
 
 export const loadSiteById = createAsyncThunk(
   "sites/getSiteById",
@@ -56,7 +67,7 @@ export const createNewSite = createAsyncThunk(
 
 export const updateSiteThunk = createAsyncThunk(
   "sites/updateSite",
-  async ({ siteId, siteData }: { siteId: number; siteData: Site }) => {
+  async ({ siteId, siteData }: { siteId: string; siteData: Site }) => {
     const updatedSite = await updateSite(siteId, siteData);
     return updatedSite;
   }
@@ -64,7 +75,7 @@ export const updateSiteThunk = createAsyncThunk(
 
 export const deleteSiteThunk = createAsyncThunk(
   "sites/deleteSite",
-  async (siteId: number) => {
+  async (siteId: string) => {
     const deletedSite = await deleteSite(siteId);
     return deletedSite;
   }
@@ -93,6 +104,23 @@ const sitesSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || "Failed to fetch sites";
         toast.error("שגיאה בטעינת האתרים");
+      }) /* */
+      .addCase(getSiteStatuses.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getSiteStatuses.fulfilled,
+        (state, action: PayloadAction<SiteStatus[]>) => {
+          console.log(action.payload);
+          state.siteStatuses = action.payload;
+          state.loading = false;
+        }
+      )
+      .addCase(getSiteStatuses.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || "Failed to fetch sites_statuses";
+        toast.error("שגיאה בטעינת הסטטוסים");
       })
       /*GET SITE */
       .addCase(loadSiteById.pending, (state) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,13 @@ import { CalendarIcon, Upload, X } from "lucide-react";
 import { cn } from "../../ui/utils";
 import { format } from "date-fns";
 import { he } from "date-fns/locale";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  getSiteStatuses,
+  createNewSite,
+} from "../../features/sites/sitesSlice";
+import type { SiteStatus } from "../../models/site";
+import { selectAllSitesStatuses } from "../../features/sites/sitesSelectors";
 
 interface AddSiteDialogProps {
   open: boolean;
@@ -35,16 +42,24 @@ export function AddSiteDialog({
   onOpenChange,
   onAdd,
 }: AddSiteDialogProps) {
-  const [formData, setFormData] = useState({
+  const dispatch = useAppDispatch();
+  const sitesStatuses = useAppSelector(selectAllSitesStatuses);
+
+  useEffect(() => {
+    dispatch(getSiteStatuses());
+  }, [dispatch]);
+
+  const [newSiteData, setnewSiteData] = useState({
     name: "",
     location: "",
-    status: "active" as "active" | "completed" | "inactive",
+    statusId: 0,
     startDate: "",
     endDate: "",
     description: "",
     budget: "",
     actualCost: "",
     imageUrl: "",
+    manager: "",
   });
 
   const [startDate, setStartDate] = useState<Date>();
@@ -53,7 +68,7 @@ export function AddSiteDialog({
   const [dragActive, setDragActive] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setnewSiteData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleDateChange = (
@@ -62,13 +77,13 @@ export function AddSiteDialog({
   ) => {
     if (field === "startDate") {
       setStartDate(date);
-      setFormData((prev) => ({
+      setnewSiteData((prev) => ({
         ...prev,
         startDate: date ? format(date, "yyyy-MM-dd") : "",
       }));
     } else {
       setEndDate(date);
-      setFormData((prev) => ({
+      setnewSiteData((prev) => ({
         ...prev,
         endDate: date ? format(date, "yyyy-MM-dd") : "",
       }));
@@ -80,7 +95,7 @@ export function AddSiteDialog({
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        setFormData((prev) => ({ ...prev, imageUrl: result }));
+        setnewSiteData((prev) => ({ ...prev, imageUrl: result }));
       };
       reader.readAsDataURL(file);
     }
@@ -107,13 +122,13 @@ export function AddSiteDialog({
   };
 
   const removeImage = () => {
-    setFormData((prev) => ({ ...prev, imageUrl: "" }));
+    setnewSiteData((prev) => ({ ...prev, imageUrl: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name.trim() || !formData.location.trim()) {
+    if (!newSiteData.name.trim() || !newSiteData.location.trim()) {
       return;
     }
 
@@ -121,10 +136,10 @@ export function AddSiteDialog({
 
     try {
       const siteData = {
-        ...formData,
-        budget: formData.budget ? Number(formData.budget) : undefined,
-        actualCost: formData.actualCost
-          ? Number(formData.actualCost)
+        ...newSiteData,
+        budget: newSiteData.budget ? Number(newSiteData.budget) : undefined,
+        actualCost: newSiteData.actualCost
+          ? Number(newSiteData.actualCost)
           : undefined,
         startDate: startDate ? format(startDate, "yyyy-MM-dd") : "",
         endDate: endDate ? format(endDate, "yyyy-MM-dd") : undefined,
@@ -132,17 +147,20 @@ export function AddSiteDialog({
 
       await onAdd(siteData);
 
+      dispatch(createNewSite(siteData));
+
       // Reset form
-      setFormData({
+      setnewSiteData({
         name: "",
         location: "",
-        status: "active",
+        statusId: 1,
         startDate: "",
         endDate: "",
         description: "",
         budget: "",
         actualCost: "",
         imageUrl: "",
+        manager: "",
       });
       setStartDate(undefined);
       setEndDate(undefined);
@@ -173,7 +191,7 @@ export function AddSiteDialog({
             </Label>
             <Input
               id="name"
-              value={formData.name}
+              value={newSiteData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               placeholder="הזן שם אתר"
               className="h-11 text-base rounded-lg"
@@ -188,7 +206,7 @@ export function AddSiteDialog({
             </Label>
             <Input
               id="location"
-              value={formData.location}
+              value={newSiteData.location}
               onChange={(e) => handleInputChange("location", e.target.value)}
               placeholder="הזן כתובת האתר"
               className="h-11 text-base rounded-lg"
@@ -202,7 +220,7 @@ export function AddSiteDialog({
               סטטוס
             </Label>
             <Select
-              value={formData.status}
+              value={newSiteData.statusId.toString()}
               onValueChange={(value) => handleInputChange("status", value)}
             >
               <SelectTrigger className="h-11 text-base rounded-lg">
@@ -286,7 +304,7 @@ export function AddSiteDialog({
               <Input
                 id="budget"
                 type="number"
-                value={formData.budget}
+                value={newSiteData.budget}
                 onChange={(e) => handleInputChange("budget", e.target.value)}
                 placeholder="הזן תקציב"
                 className="h-11 text-base rounded-lg"
@@ -300,7 +318,7 @@ export function AddSiteDialog({
               <Input
                 id="actualCost"
                 type="number"
-                value={formData.actualCost}
+                value={newSiteData.actualCost}
                 onChange={(e) =>
                   handleInputChange("actualCost", e.target.value)
                 }
@@ -317,7 +335,7 @@ export function AddSiteDialog({
             </Label>
             <Textarea
               id="description"
-              value={formData.description}
+              value={newSiteData.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
               placeholder="הזן תיאור האתר"
               className="min-h-20 text-base rounded-lg resize-none"
@@ -329,7 +347,7 @@ export function AddSiteDialog({
           <div className="space-y-2">
             <Label className="text-base">תמונת האתר</Label>
 
-            {!formData.imageUrl ? (
+            {!newSiteData.imageUrl ? (
               <div
                 className={cn(
                   "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors",
@@ -351,7 +369,7 @@ export function AddSiteDialog({
             ) : (
               <div className="relative">
                 <img
-                  src={formData.imageUrl}
+                  src={newSiteData.imageUrl}
                   alt="תמונת האתר"
                   className="w-full h-32 object-cover rounded-lg border"
                 />
@@ -395,8 +413,8 @@ export function AddSiteDialog({
               className="flex-1 h-11 text-base rounded-lg bg-primary hover:bg-primary/90 hover:scale-105 transition-all duration-200"
               disabled={
                 isSubmitting ||
-                !formData.name.trim() ||
-                !formData.location.trim()
+                !newSiteData.name.trim() ||
+                !newSiteData.location.trim()
               }
             >
               {isSubmitting ? (

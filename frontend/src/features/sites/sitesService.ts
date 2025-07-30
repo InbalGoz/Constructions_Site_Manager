@@ -1,6 +1,6 @@
 /*ביצוע בקשות לשרת*/
 import axios from "axios";
-import type { Site } from "../../models/site";
+import type { Site, SiteStatus } from "../../models/site";
 //import devConfig from "../../env/dev";
 import type { Res } from "../../models/res";
 
@@ -11,6 +11,13 @@ export async function fetchAllSites(): Promise<Site[]> {
   const response: Res = await axios.get(`${BASE_URL}`);
   return response.data.success
     ? (response.data.data as Site[])
+    : Promise.reject(response.data.error);
+}
+
+export async function fetchAllSiteStatuses(): Promise<SiteStatus[]> {
+  const response: Res = await axios.get(`${BASE_URL}`);
+  return response.data.success
+    ? (response.data.data as SiteStatus[])
     : Promise.reject(response.data.error);
 }
 
@@ -30,7 +37,7 @@ export async function createSite(siteData: Site): Promise<Site> {
 }
 
 export async function updateSite(
-  siteId: number,
+  siteId: string,
   siteData: Site
 ): Promise<Site> {
   const response: Res = await axios.put(`${BASE_URL}/${siteId}`, siteData); //send data to the body of the req
@@ -39,7 +46,7 @@ export async function updateSite(
     : Promise.reject(response.data.error);
 }
 
-export async function deleteSite(siteId: number): Promise<Site> {
+export async function deleteSite(siteId: string): Promise<Site> {
   const response: Res = await axios.delete(`${BASE_URL}/${siteId}`); //send id in the url of the req
   return response.data.success
     ? (response.data.data as Site)

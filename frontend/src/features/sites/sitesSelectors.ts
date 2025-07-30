@@ -2,6 +2,8 @@ import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "../../app/store";
 
 export const selectAllSites = (state: RootState) => state.sites.all_sites;
+export const selectAllSitesStatuses = (state: RootState) =>
+  state.sites.siteStatuses;
 export const selectAllSitesLoading = (state: RootState) => state.sites.loading;
 export const selectAllSitesError = (state: RootState) => state.sites.error;
 export const selectSelectedSite = (state: RootState) =>
